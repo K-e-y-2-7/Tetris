@@ -25,6 +25,9 @@ CANVAS = tkinter.Canvas(ROOT, width=RES[1], height=RES[0],\
                         bg='purple', highlightthickness=0) 
 CANVAS.pack()
 
-CANVAS.create_text(700, 100, text='TETRIS', font=('Arial', 50),\
-                   fill='yellow', )
+name_img_obj = tkinter.PhotoImage(file='img/Tetris_logo.png')
+CANVAS.create_image(10, 10, anchor='nw', image=name_img_obj)
+
+CANVAS.create_text(50, 450, text=' Score: \n123456', font=('ProtoSans56', 40),\
+                   fill='yellow', anchor='nw')
 
