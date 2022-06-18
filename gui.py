@@ -5,7 +5,6 @@ A file that reproduces the graphical interface.
 
 '''
 
-from dataclasses import field
 from PIL import Image, ImageTk
 
 from Settings import *
