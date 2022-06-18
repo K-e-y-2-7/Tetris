@@ -11,7 +11,7 @@ TILE = 35  # size of one piece
 WIDTH, HIGH = 12, 18  # how many such pieces vertically and horizontally
 FPS = 80  
 GAME_RESS = WIDTH * TILE, HIGH * TILE  # game resolution
-RES = 720, 1280  # screen resolution
+RES = 700, 1200  # screen resolution
 
 # Settings of window
 ROOT = tkinter.Tk()
