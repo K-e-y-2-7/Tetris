@@ -5,21 +5,15 @@ The main file of game.
 
 '''
 
-import time
-from random import randrange
-
 import Exceptions
 import gui
+import Game_logic
 
-get_collor = lambda: (randrange(30, 256), randrange(30, 256), randrange(30, 256)) 
-def rgb_to_hex(rgb):
-        return '#%02x%02x%02x' % rgb
 
 
 try:
     for item in gui.grid:
-        #time.sleep(0.3)
-        gui.game_screen_canv.itemconfigure(item, fill=rgb_to_hex(get_collor()))
+        gui.game_screen_canv.itemconfigure(item, fill=Game_logic.rgb_to_hex(Game_logic.get_collor()))
 
     for item in gui.grid:
         gui.game_screen_canv.itemconfigure(item, fill='')
