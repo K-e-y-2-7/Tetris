@@ -8,9 +8,9 @@ File containing all constants.
 import tkinter
 
 TILE = 35  # size of one piece
-WIDTH, HIGH = 12, 18  # how many such pieces vertically and horizontally
+WIDTH, HEIGHT = 12, 18  # how many such pieces vertically and horizontally
 FPS = 80  
-GAME_RESS = WIDTH * TILE, HIGH * TILE  # game resolution
+GAME_RESS = WIDTH * TILE, HEIGHT * TILE  # game resolution
 RES = 700, 1200  # screen resolution
 
 # Settings of window

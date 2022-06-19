@@ -11,9 +11,12 @@ from Settings import *
 
 # Settings of game interface
 screen_canv = tkinter.Canvas(ROOT, width=RES[1], height=RES[0],
-                        bg='#6C00B5', highlightthickness=0) 
+                        bg='#6C00B5', highlightthickness=0)
 screen_canv.pack()
 
+game_screen_canv = tkinter.Canvas(ROOT, width=WIDTH * TILE + 1,
+        height=HEIGHT * TILE + 1, bg='purple', highlightthickness=0)
+game_screen_canv.place(x=415, y=60, anchor='nw')
 # The disign of interface
 bg_image = Image.open('img/background_img.png').resize((1200, 700))
 bg_image = ImageTk.PhotoImage(bg_image)
@@ -21,7 +24,7 @@ screen_canv.create_image(0, 0, anchor='nw', image=bg_image)
 
 field_bg_image = Image.open('img/field_background.png').resize((420, 630))
 field_bg_image = ImageTk.PhotoImage(field_bg_image)
-screen_canv.create_image(415, 60, anchor='nw', image=field_bg_image)
+game_screen_canv.create_image(0, 0, anchor='nw', image=field_bg_image)
 
 name_img_obj = Image.open('img/Tetris_logo.png').resize((341, 98))
 name_img_obj = ImageTk.PhotoImage(name_img_obj)
@@ -32,10 +35,9 @@ top10_img = ImageTk.PhotoImage(top10_img)
 screen_canv.create_image(950, 20, anchor='nw', image=top10_img)
 
 
-grid = [screen_canv.create_rectangle(x * TILE, y * TILE, x * TILE +
-        TILE, y * TILE + TILE) for x in range(WIDTH) for y in range(HIGH)]
-for item in grid:
-    screen_canv.move(item, 415, 60)
+grid = [game_screen_canv.create_rectangle(x * TILE, y * TILE, x * TILE +
+        TILE, y * TILE + TILE) for x in range(WIDTH) for y in range(HEIGHT)]
+
 
 # Creates images of our figures
 i_fig = Image.open('img/I_figure.png').resize((47, 185))
