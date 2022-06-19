@@ -63,4 +63,4 @@ canvas.create_text(35, 155, text='Your nickname: \n ...', font=('ProtoSans56', 2
 canvas.create_text(35, 240, text='Score: ...', font=('ProtoSans56', 35),
                    fill='orange', anchor='nw')
 
-canvas.mainloop()
+
