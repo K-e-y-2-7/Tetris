@@ -19,10 +19,10 @@ def rgb_to_hex(rgb):
 try:
     for item in gui.grid:
         #time.sleep(0.3)
-        gui.canvas.itemconfigure(item, fill=rgb_to_hex(get_collor()))
+        gui.screen_canv.itemconfigure(item, fill=rgb_to_hex(get_collor()))
 
     for item in gui.grid:
-        gui.canvas.itemconfigure(item, fill='')
+        gui.screen_canv.itemconfigure(item, fill='')
     gui.ROOT.mainloop()
     
 except Exceptions.GameOver:
