@@ -7,7 +7,7 @@ A file that reproduces the graphical interface.
 
 from PIL import Image, ImageTk
 
-from Settings import *
+from Game_logic import *
 
 # Settings of game interface
 screen_canv = tkinter.Canvas(ROOT, width=RES[1], height=RES[0],
