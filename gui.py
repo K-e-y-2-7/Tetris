@@ -38,7 +38,6 @@ top10_img = ImageTk.PhotoImage(top10_img)
 screen_canv.create_image(950, 20, anchor='nw', image=top10_img)
 
 # Creates images of our figures
-
 figures_img = {
     'i-fig': Image.open('img/I_figure.png').resize((140, 35)),
     'j-fig': Image.open('img/J_figure.png').resize((70, 105)), 
@@ -57,8 +56,6 @@ next_figures_img = {
     't-fig': Image.open('img/T_figure.png').resize((93, 140)), 
     'z-fig': Image.open('img/Z_figure.png').resize((93, 140)) }
 
-
-
 # Displays which figure will be next.
 for fig in figures_obj:
     if fig[1] == next_figure:
@@ -66,25 +63,19 @@ for fig in figures_obj:
         screen_canv.create_image(180, 450, anchor='center', image=next_figure_img)
         break
 
-# draw figure
-
-
 grid = [game_screen_canv.create_rectangle(x * TILE, y * TILE, x * TILE +
         TILE, y * TILE + TILE) for x in range(WIDTH) for y in range(HEIGHT)]
 
-
+# Displays a figure on the game field.
 for idx in range(4):
-    figure_rect_x = figure[idx][0] * TILE 
-    figure_rect_y = figure[idx][1] * TILE
-    game_screen_canv.create_rectangle(figure_rect_x, figure_rect_y,
-        figure_rect_x + TILE, figure_rect_y + TILE, fill=rgb_to_hex(color))
     for fig in figures_obj:
         if fig[1] == figure:
-            figure_img = ImageTk.PhotoImage(figures_img[fig[0]])
-            game_screen_canv.create_image(figure_rect_x, figure_rect_y, anchor='nw', image=figure_img)
+            figure_rect_x = fig[1][idx][0] * TILE 
+            figure_rect_y = fig[1][idx][1] * TILE
+            game_screen_canv.create_rectangle(figure_rect_x, figure_rect_y,
+                            figure_rect_x + TILE, figure_rect_y +
+                            TILE, fill=fig[2])
             break
-    
- 
 
 screen_canv.create_text(380, 13, text='BEST RECORD:  123456 ',
                 font=('ProtoSans56', 25), fill='purple', anchor='nw')
@@ -94,5 +85,6 @@ screen_canv.create_text(35, 155, text='Your nickname: \n ...',
 
 screen_canv.create_text(35, 240, text='Score: ...',
                 font=('ProtoSans56', 35), fill='orange', anchor='nw')
+
 
 
