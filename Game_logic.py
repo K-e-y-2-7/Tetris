@@ -10,6 +10,8 @@ from random import choice, randrange
 
 from Settings import *
 
+# Determine the shape of the figure through its position coordinates.
+# One tupple is one block of figure.
 figures_pos = [[(-1, 0), (-2, 0), (0, 0), (1, 0)],
                [(0, 1), (0, -1), (0, 0), (1, -1)],
                [(0, 0), (0, -1), (0, 1), (-1, -1)],
@@ -17,11 +19,17 @@ figures_pos = [[(-1, 0), (-2, 0), (0, 0), (1, 0)],
                [(0, 0), (-1, 0), (0, 1), (-1, -1)],
                [(0, 0), (0, -1), (0, 1), (-1, 0)],
                [(-1, 0), (-1, 1), (0, 0), (0, -1)]]
-figures_name = ['i-fig', 'j-fig', 'l-fig', 'o-fig', 's-fig', 't-fig', 'z-fig']
-figures_color = ['#4cc9f0', '#072ac8', '#fb8500', '#ffd500', '#31cb00', '#b100e8', '#ff002b']
+
+# Determine the color and name of figure. 
+figures_color = ['#4cc9f0', '#072ac8', '#fb8500', '#ffd500',
+                 '#31cb00', '#b100e8', '#ff002b']
+figures_name = ['i-fig', 'j-fig', 'l-fig', 'o-fig',
+                's-fig', 't-fig', 'z-fig']
+
 
 figures = [[[x_pos + WIDTH // 2, y_pos + 1, 1, 1] for x_pos, y_pos in fig_pos] for fig_pos in figures_pos]
-figures_obj = list(zip(figures_name, figures, figures_color))
+# Concotinate all data of the figure in one object.
+figures_obj = list(zip(figures_name, figures, figures_color)) 
 
 field = [[0 for i in range(WIDTH)] for j in range(HEIGHT)]
 
@@ -50,7 +58,7 @@ def get_top() -> list:
 
 
 def rgb_to_hex(rgb):
-    
+
     return '#%02x%02x%02x' % rgb
 
 
@@ -61,6 +69,18 @@ def check_borders():
         return False
 
     return True
+
+
+def move_obj(event):
+    global rotate, anim_limit, dx
+    if event.keysym == 'Up':
+        rotate = True
+    elif event.keysym == 'Down':
+        anim_limit = 100
+    elif event.keysym == 'Left':
+        dx = -1 
+    elif event.keysym == 'Right':
+        dx = 1
 
 score, line = 0, 0
 top_10 = get_top()
