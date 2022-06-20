@@ -78,8 +78,11 @@ for fig in figures_obj:
         screen_canv.create_image(180, 450, anchor='center', image=next_figure_img)
         break
 
-grid = [game_screen_canv.create_rectangle(x * TILE, y * TILE, x * TILE +
+grid_1 = [game_screen_canv.create_rectangle(x * TILE, y * TILE, x * TILE +
         TILE, y * TILE + TILE) for x in range(WIDTH) for y in range(HEIGHT)]
+
+grid_2 = [top_10_canv.create_rectangle(x, y * TILE, x * 309, y * TILE + TILE)
+                                     for x in range(2) for y in range(HEIGHT)]
 
 # Displays a figure on the game field.
 for idx in range(4):
@@ -101,8 +104,7 @@ screen_canv.create_text(35, 155, text='Your nickname: \n ...',
 screen_canv.create_text(35, 240, text='Score: ...',
                 font=('ProtoSans56', 35), fill='orange', anchor='nw')
 
-grid1 = [top_10_canv.create_rectangle(x, y * TILE, x * 309, y * TILE + TILE)
-                                     for x in range(2) for y in range(HEIGHT)]
+
 
 
 
