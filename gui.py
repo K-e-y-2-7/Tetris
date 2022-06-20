@@ -20,22 +20,37 @@ game_screen_canv = tkinter.Canvas(ROOT, width=WIDTH * TILE + 1,
         height=HEIGHT * TILE + 1, bg='purple', highlightthickness=0)
 game_screen_canv.place(x=415, y=60, anchor='nw')
 
+# Create a screen to field of top 10 players
+top_10_canv = tkinter.Canvas(ROOT, width=310,
+        height=387, bg='purple', highlightthickness=0)
+top_10_canv.place(x=865, y=165, anchor='nw')
+
 # The disign of interface
-bg_image = Image.open('img/background_img.png').resize((1200, 700))
-bg_image = ImageTk.PhotoImage(bg_image)
+
+def image_generator(img: str, size_x: int, size_y: int) -> ImageTk.PhotoImage:
+    ''' Function accepts name of image, x and y size.
+        Creates image and resize it. And return image object.
+    '''
+    image = ImageTk.PhotoImage(Image.open(img).resize((size_x, size_y)))
+    return image
+
+def display_top10(y = 40):
+    for player in top_10:
+        top_10_canv.create_text(10, y, text=f'{player}',
+                    font=('ProtoSans56', 15), fill='orange', anchor='nw')
+        y += 35
+
+bg_image = image_generator('img/background_img.png', 1200, 700)
 screen_canv.create_image(0, 0, anchor='nw', image=bg_image)
 
-field_bg_image = Image.open('img/field_background.png').resize((420, 630))
-field_bg_image = ImageTk.PhotoImage(field_bg_image)
+field_bg_image = image_generator('img/field_background.png', 420, 630)
 game_screen_canv.create_image(0, 0, anchor='nw', image=field_bg_image)
 
-name_img_obj = Image.open('img/Tetris_logo.png').resize((341, 98))
-name_img_obj = ImageTk.PhotoImage(name_img_obj)
+name_img_obj = image_generator('img/Tetris_logo.png', 341, 98)
 screen_canv.create_image(30, 10, anchor='nw', image=name_img_obj)
 
-top10_img = Image.open('img/top_ten_image.png').resize((160, 120))
-top10_img = ImageTk.PhotoImage(top10_img)
-screen_canv.create_image(950, 20, anchor='nw', image=top10_img)
+top10_img = image_generator('img/top_ten_image.png', 160, 120)
+screen_canv.create_image(930, 20, anchor='nw', image=top10_img)
 
 # Creates images of our figures
 figures_img = {
@@ -77,7 +92,7 @@ for idx in range(4):
                             TILE, fill=fig[2])
             break
 
-screen_canv.create_text(380, 13, text='BEST RECORD:  123456 ',
+screen_canv.create_text(380, 13, text=f'BEST RECORD:  {record} ',
                 font=('ProtoSans56', 25), fill='purple', anchor='nw')
 
 screen_canv.create_text(35, 155, text='Your nickname: \n ...',
@@ -86,5 +101,9 @@ screen_canv.create_text(35, 155, text='Your nickname: \n ...',
 screen_canv.create_text(35, 240, text='Score: ...',
                 font=('ProtoSans56', 35), fill='orange', anchor='nw')
 
+grid1 = [top_10_canv.create_rectangle(x, y * TILE, x * 309, y * TILE + TILE)
+                                     for x in range(2) for y in range(HEIGHT)]
 
 
+
+display_top10()
