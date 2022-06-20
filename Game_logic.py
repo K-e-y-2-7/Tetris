@@ -25,6 +25,11 @@ figures_obj = list(zip(figures_name, figures, figures_color))
 
 field = [[0 for i in range(WIDTH)] for j in range(HEIGHT)]
 
+get_color = lambda: (randrange(30, 256), randrange(30, 256), randrange(30, 256))
+
+figure, next_figure = deepcopy(choice(figures)), deepcopy(choice(figures))
+color, next_color = get_color(), get_color()
+
 anim_count, anim_speed, anim_limit = 0, 60, 2000
 
 def get_top() -> list:
@@ -32,7 +37,7 @@ def get_top() -> list:
         writing them in list top.
         Return list of top players.
     '''
-    
+
     with open('Scores.txt', 'r') as score_file_r:
         flag = 0  
         top = []
@@ -43,17 +48,9 @@ def get_top() -> list:
 
     return top
 
-score, line = 0, 0
-top_10 = get_top()
-record = int(top_10[0].split(': ')[2])
-
-get_color = lambda: (randrange(30, 256), randrange(30, 256), randrange(30, 256))
-
-figure, next_figure = deepcopy(choice(figures)), deepcopy(choice(figures))
-color, next_color = get_color(), get_color()
-
 
 def rgb_to_hex(rgb):
+    
     return '#%02x%02x%02x' % rgb
 
 
@@ -62,6 +59,15 @@ def check_borders():
         return False
     elif figure[i][1] > HEIGHT - 1 or field[figure[i][1]][figure[i][0]]:
         return False
+
     return True
+
+score, line = 0, 0
+top_10 = get_top()
+record = int(top_10[0].split(': ')[2])
+
+
+
+
 
 
