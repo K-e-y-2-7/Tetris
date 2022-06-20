@@ -27,21 +27,25 @@ field = [[0 for i in range(WIDTH)] for j in range(HEIGHT)]
 
 anim_count, anim_speed, anim_limit = 0, 60, 2000
 
-try:
+def get_top() -> list:
+    ''' Finction is extraction data from file scores.txt and
+        writing them in list top.
+        Return list of top players.
+    '''
+    
     with open('Scores.txt', 'r') as score_file_r:
         flag = 0  
-        top_10 = []
+        top = []
         for line in score_file_r:
-            top_10.append(line[:-1])
+            top.append(line[:-1])
             flag += 1
             if flag == 10: break
-except FileNotFoundError:
-    with open('Scores.txt', 'w') as score_file_w:
-        pass
 
-score = ''
+    return top
+
+score, line = 0, 0
+top_10 = get_top()
 record = int(top_10[0].split(': ')[2])
-
 
 get_color = lambda: (randrange(30, 256), randrange(30, 256), randrange(30, 256))
 

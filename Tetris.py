@@ -23,3 +23,6 @@ except Exceptions.GameOver:
         ...
 except Exceptions.Quit:
     exit()
+except FileNotFoundError:
+    with open('Scores.txt', 'w') as score_file_w:
+        pass
