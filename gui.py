@@ -12,6 +12,8 @@ from Game_logic import *
 
 # The disign of interface
 def display_top10(y = 40):
+    ''' Function display list of best 10 players with their scores
+    '''
     for player in top_10:
         top_10_canv.create_text(10, y, text=f'{player}',\
                     font=('ProtoSans56', 15), fill='orange', anchor='nw')
@@ -26,10 +28,11 @@ def image_generator(img: str, size_x: int, size_y: int) -> ImageTk.PhotoImage:
     return image
 
 
-def display_image(canv: tkinter.Canvas, img: str, resize: tuple, coordinate: tuple, anch: str):
+def display_image(canv: tkinter.Canvas, img: str, resize: tuple, coordinate: tuple, anch: str)-> ImageTk.PhotoImage:
     ''' Function accepts name of image, tuple of x and y coordinate,
-        canvas object, tuple of x and y size.
-        Creates image and resize it. And return image object.
+        canvas object, tuple of x and y size, anchor.
+        Call function image_generator and display result of work image_generator.
+        Return image object.
     '''
     image = image_generator(img, resize[0], resize[1])
     canv.create_image(coordinate[0], coordinate[1], anchor=anch, image=image)
@@ -81,23 +84,27 @@ grid_1 = [game_screen_canv.create_rectangle(x * TILE, y * TILE, x * TILE +\
 grid_2 = [top_10_canv.create_rectangle(x, y * TILE, x * 309, y * TILE + TILE)\
                                      for x in range(2) for y in range(HEIGHT)]
 
-# Displays which figure will be next.
+
 def draw_next_figure():
+    ''' Function displays on screen which figure will be next.
+    '''
     global nxt_fig_img
     nxt_fig_img = ImageTk.PhotoImage(nxt_figs_img[def_figure(next_figure)[2]])
     screen_canv.create_image(180, 450, anchor='center', image=nxt_fig_img)
      
 
-# Displays a figure on the game field.
-def draw_figure(fig1):
+
+def draw_figure(fig_list):
+    ''' Function displays a figure on the game field.
+    '''
     for idx in range(4):
         figure_rect_x = figure[0][idx][0] * TILE 
         figure_rect_y = figure[0][idx][1] * TILE
-        fig1.append(game_screen_canv.create_rectangle(figure_rect_x, figure_rect_y,
+        fig_list.append(game_screen_canv.create_rectangle(figure_rect_x, figure_rect_y,
                                 figure_rect_x + TILE, figure_rect_y +
                                 TILE, fill=figure[1]))
 
-    return fig1
+    return fig_list
 
 
 display_top10()
