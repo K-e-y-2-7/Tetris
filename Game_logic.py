@@ -91,6 +91,7 @@ grid_2 = [top_10_canv.create_rectangle(x, y * TILE, x * 309, y * TILE + TILE)\
 display_top10()
 
 
+
 figures_pos = [[((-1, 0), (-2, 0), (0, 0), (1, 0)), '#4cc9f0', 'i-fig'],
                 [((0, 0), (0, -1), (0, 1), (1, -1)), '#072ac8', 'j-fig'],
                 [((0, 0), (0, -1), (0, 1), (-1, -1)), '#fb8500', 'l-fig'],
