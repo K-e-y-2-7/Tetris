@@ -7,20 +7,13 @@ The main file of game.
 
 import Exceptions
 import Gui
-import Game_logic
 
 
-try:
-    for item in Gui.grid_1:
-        Gui.game_screen_canv.itemconfigure(item, fill=Game_logic.rgb_to_hex(Game_logic.get_color()))
 
-    for item in Gui.grid_1:
-        Gui.game_screen_canv.itemconfigure(item, fill='')
-        
-    Gui.ROOT.mainloop()
-    
+try:     
+    Gui.running(Gui.grid_1, Gui.draw_figure, Gui.draw_next_figure)
 except Exceptions.GameOver:
-        ...
+        print('game over')
 except Exceptions.Quit:
     exit()
 except FileNotFoundError:
