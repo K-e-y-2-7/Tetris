@@ -46,7 +46,7 @@ def display_top10(y = 40):
                     font=('ProtoSans56', 15), fill='orange', anchor='nw')
         y += 35
 
-
+display_top10()
 def image_generator(img: str, size_x: int, size_y: int) -> ImageTk.PhotoImage:
     ''' Function accepts name of image, x and y size.
         Creates image and resize it.
@@ -120,7 +120,7 @@ figures = [[[[x_pos + WIDTH // 2, y_pos + 1, 1, 1] for x_pos, y_pos in \
 
 field = [[0 for i in range(WIDTH)] for j in range(HEIGHT)]
 
-anim_count, anim_speed, anim_limit = 0, 60, 2000
+anim_count, anim_speed, anim_limit = 0, 120, 2000
 
 score, lines = 0, 0
 scores = {0: 0, 1: 100, 2: 300, 3: 700, 4: 1500}
@@ -351,7 +351,7 @@ def draw_field(fig_list: list) -> list:
 
 def game_over():
     '''Function determines behavior after the end of the game'''
-    global field
+    global field, anim_count, anim_speed, anim_limit
     for i in range(WIDTH):
         if field[0][i]:
             field = [[0 for i in range(WIDTH)] for i in range(HEIGHT)]
@@ -392,8 +392,6 @@ def start():
             # Displays a changing in score and record
             screen_canv.itemconfigure(scr, text=f'Score: {score}')
             screen_canv.itemconfigure(rec, text=f'BEST RECORD:  {record}')
-            display_top10()
-
             # game over
             game_over()
             # Set default values for next iteration. 
