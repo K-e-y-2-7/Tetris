@@ -6,12 +6,12 @@ The main file of game.
 '''
 
 import Exceptions
-import Gui
-
+import Game_logic
 
 
 try:     
-    Gui.running(Gui.grid_1, Gui.draw_figure, Gui.draw_next_figure)
+    Game_logic.start()
+    Game_logic.tetris.destroy()
 except Exceptions.GameOver:
         print('game over')
 except Exceptions.Quit:
