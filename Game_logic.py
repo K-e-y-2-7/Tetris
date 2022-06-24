@@ -27,7 +27,7 @@ figures = [[[[x_pos + WIDTH // 2, y_pos + 1, 1, 1] for x_pos, y_pos in \
 field = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
 figure, next_figure = deepcopy(choice(figures)), deepcopy(choice(figures))
 
-color, next_color = figure[1], next_figure[1]
+color, next_color = figure[2], next_figure[2]
 get_color = lambda: (randrange(30, 256), randrange(30, 256),
                                          randrange(30, 256))
 
@@ -148,14 +148,15 @@ def move_y():
 
         for idx in range(4):
             figure[0][idx][1] += 1
+            # If the figure does not touch the bottom board, move it.
             if not check_borders(idx):
-        
+                # Puts the name of the figure in the cells to then color them.
                 for idx in range(4):
                     field[figure_old[0][idx][1]]\
                             [figure_old[0][idx][0]] = color
                 figure, color = next_figure, next_color
                 next_figure  = deepcopy(choice(figures))
-                next_color = next_figure[1]
+                next_color = next_figure[2]
                 anim_limit = 2000
                 break
 
@@ -253,28 +254,36 @@ def game_over(grid_1):
     global field, score
 
     for i in range(WIDTH):
+        # Check if the game is over.
         if field[0][i]:
+            # Remove the button to then replace it with another.
             btn_stop.destroy()
+            # Sets the default values.
             field = [[0 for i in range(WIDTH)] for i in range(HEIGHT)]
             anim_count, anim_speed, anim_limit = 0, 60, 2000
             oldscore = score
             score = 0
             if grid_1:
-                for item in grid_1:
-                    game_screen_canv.itemconfigure(item, fill="")
+                # Creates animation, colloring of all cells.
                 for item in grid_1:
                     game_screen_canv.itemconfigure(item,
                                             fill=rgb_to_hex(get_color()))
                     time.sleep(0.004)
                     tetris.update_idletasks()
                     tetris.update()
+                # Clears the game field, all cells, thereby preparing
+                # it for the next session.
                 for item in grid_1:
                     game_screen_canv.itemconfigure(item, fill="")
             
-            score_update(nickname, oldscore)
             app_running = False
+            # Writes score in Scores.txt 
+            score_update(nickname, oldscore)
+            # Delete the grid of the game session.
             for g in grid_1: game_screen_canv.delete(g)
+            # Delete the text of nickname of the game session.
             screen_canv.delete(nick)
+            # Creates a button in place of the deleted one.
             btn_start = Button(screen_canv, image=start_img, command=start,\
                                          width=170, height=65, bg='#4a0a77')
             btn_start.place(x=80, y=540)
@@ -292,14 +301,13 @@ def on_closing():
         app_running = False
         tetris.destroy() 
 
-
 display_top10(top_10)
+
 x_moving, rotate = 0, False
 def game_start(grid):
     '''Launches the program'''
     
-    print(nickname)
-    global score, x_moving, rotate, app_running, btn_stop
+    global app_running, btn_stop, x_moving, rotate, score
 
     # Replacing one button with another.
     btn_start.destroy()

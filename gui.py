@@ -127,7 +127,8 @@ def draw_figure(fig_list: list, figure: list) -> list:
     fourth_piece_rect_x = figure[0][3][0] * TILE 
     fourth_piece_rect_y = figure[0][3][1] * TILE
     
-
+    # Creates a picture for a particle of a figure, and display it on the
+    # set coordinates. As a result, a figure is formed.
     def piece_img_generator() -> ImageTk.PhotoImage:
         fig_img = ImageTk.PhotoImage(figs_img[figure[2]])
 
@@ -187,9 +188,13 @@ def draw_field(fig_list: list, field) -> list:
 
     '''
 
+    # Get the coordinate Y.
     for y_axis, raw in enumerate(field):
+        # Get the coordinate X.
         for x_axis, col in enumerate(raw):
+            # Сheck if there is a figure in this cell, or rather its name.
             if col:
+                # If there is a figure in this cell, paint the cell.
                 figure_rect_x, figure_rect_y = x_axis * TILE, y_axis * TILE
                 
                 fig_list.append(game_screen_canv.create_rectangle(
