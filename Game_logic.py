@@ -53,7 +53,7 @@ def create_nick() -> str:
         \nASCII characters, and/or underscores: ')
 
         suitable_symbols = ''.join((f'{ascii_letters}', '_', '0123456789'))
-        
+
         # Validation.
         if nickname:
             if len(nickname) <= 10:
@@ -89,8 +89,8 @@ def score_update(nick: str, score):
         # from these strings.
         old_scores = {(line.split(' : ')[1][:-2]).split(': ')[0].strip() : \
                                   int((line.split(' : ')[1]).split(': ')[1])
-                                                   for line in score_file_r}
-            
+                                      for line in score_file_r if line[:-2]}
+
         if nick in old_scores.keys():
             if score > old_scores.get(nick):
                 old_scores.update([(nick, score)])
@@ -278,6 +278,7 @@ def game_over(grid_1):
             btn_start = Button(screen_canv, image=start_img, command=start,\
                                          width=170, height=65, bg='#4a0a77')
             btn_start.place(x=80, y=540)
+            display_top10(top_10)
 
 
 def on_closing():
