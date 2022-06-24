@@ -221,7 +221,10 @@ quit_img = image_generator('img/quit.png', 220, 110)
 score, lines = 0, 0
 scores = {0: 0, 1: 10, 2: 30, 3: 70, 4: 120}
 top_10 = get_score(stop = 10)
-record = int(top_10[0].split(': ')[2])
+if top_10[0]:
+    record = int(top_10[0].split(': ')[2])
+else:
+    record = 0 
 
 # Creates and display needed text
 rec = screen_canv.create_text(380, 13, text=f'BEST RECORD:  {record}',
