@@ -9,13 +9,10 @@ import Exceptions
 import Game_logic
 
 
-try:     
-    Game_logic.start()
-    Game_logic.tetris.destroy()
+try:    
+    Game_logic.tetris.mainloop()  
 except Exceptions.GameOver:
-        print('game over')
-except Exceptions.Quit:
-    exit()
+    print(Exceptions.GameOver)
 except FileNotFoundError:
     with open('Scores.txt', 'w') as score_file_w:
-        pass
+        pass 

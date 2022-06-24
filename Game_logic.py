@@ -5,27 +5,111 @@ A file that reproduces the main logic of game.
 
 '''
 
-from random import choice, randrange
 from copy import deepcopy
+from random import choice, randrange
 import time
+from string import ascii_letters
 
-from Settings import *
+from Exceptions import *
 from Gui import *
 
-
+# Define main variables of game.
 app_running = True
-anim_count, anim_speed, anim_limit = 0, 120, 2000
+anim_count, anim_speed, anim_limit = 0, 60, 2000
 
+# List of coordinates for each part of the figure.
 figures = [[[[x_pos + WIDTH // 2, y_pos + 1, 1, 1] for x_pos, y_pos in \
                 fig_pos[0]], fig_pos[1], fig_pos[2]] for fig_pos in \
                 figures_possition]
 
-field = [[0 for i in range(WIDTH)] for j in range(HEIGHT)]
+# A list containing lists of zeros.
+# Zeros are subsequently replaced by color and a figure is drawn in this place
+field = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
 figure, next_figure = deepcopy(choice(figures)), deepcopy(choice(figures))
 
 color, next_color = figure[1], next_figure[1]
 get_color = lambda: (randrange(30, 256), randrange(30, 256),
                                          randrange(30, 256))
+
+
+# Functions for score display.
+def create_nick() -> str:
+    ''' Function creates nick name, and validate it.
+
+        =================
+        Return: nickname.
+    '''
+
+    while True:
+        messagebox.showinfo(title='NICKNAME', message='\
+        \n  Enter your nickname in console.\
+        \n The nickname must contain no more than 10 characters, \
+        \ncannot be an empty string, and must only contain numbers, \
+        \nASCII characters, and/or underscores: ')
+
+        nickname = input('Enter your nickname.\
+        \n The nickname must contain no more than 10 characters,\
+        \ncannot be an empty string, and must only contain numbers,\
+        \nASCII characters, and/or underscores: ')
+
+        suitable_symbols = ''.join((f'{ascii_letters}', '_', '0123456789'))
+        
+        # Validation.
+        if nickname:
+            if len(nickname) <= 10:
+                for character in nickname:
+                    if character not in suitable_symbols:
+                        messagebox.showwarning(title='Not valid char',\
+                            message=f'Character "{character}" \
+                                \n not ASCII, number or "_" !')
+                        break 
+                else:
+                    break
+            else:
+                messagebox.showwarning(title='Too long nick',\
+                    message=f'Length of your nickname = {len(nickname)}\
+        \n must be not more than ten!')
+        else: 
+            messagebox.showwarning(title='Empty nick',\
+                    message=f'Length of your nickname = {len(nickname)}\
+        \n must be not empty and not "  "!')
+
+    return nickname
+
+
+def score_update(nick: str, score):
+    ''' Function which update data in score file. '''
+    
+    with open('Scores.txt', 'r') as score_file_r:
+        # An explanation for the horrible incomprehensible
+        # construction below.
+        #
+        # Disassemble in dict comprehension into a string file that
+        # already consisted of dict, and build a new dict
+        # from these strings.
+        old_scores = {(line.split(' : ')[1][:-2]).split(': ')[0].strip() : \
+                                  int((line.split(' : ')[1]).split(': ')[1])
+                                                   for line in score_file_r}
+            
+        if nick in old_scores.keys():
+            if score > old_scores.get(nick):
+                old_scores.update([(nick, score)])
+        else:
+            old_scores.update([(nick, score)])
+        # We turn the dict into a list for sorting data in it
+        # by our special sorting system.
+        old_scores = [(key, value) for key, value in old_scores.items()]
+        old_scores.sort(key=lambda item: item[1], reverse=True) 
+        # Now we overwrite our file to make changes.
+
+        with open('Scores.txt', 'w') as score_file_w:
+            # Creates new dict with updated and sorted data
+            new_scores = {item[0] : int(item[1]) for item in old_scores}
+            # Put our dict in a file
+            for idx, (key, value) in enumerate(new_scores.items()):
+                score_file_w.write(f'#{idx + 1} : {key}: {value} \n')
+        
+        return None
 
 
 def rgb_to_hex(rgb: tuple) -> str:
@@ -65,7 +149,7 @@ def move_y():
         for idx in range(4):
             figure[0][idx][1] += 1
             if not check_borders(idx):
-
+        
                 for idx in range(4):
                     field[figure_old[0][idx][1]]\
                             [figure_old[0][idx][0]] = color
@@ -156,44 +240,73 @@ def check_lines() -> int:
         if count < WIDTH:
             line -= 1
         else:
-            anim_speed += 3
+            anim_speed += 10
             lines += 1
 
     return lines
 
 # Functions responsible for logic outside the game.
-def game_over():
+def game_over(grid_1):
     '''Function determines behavior after the end of the game'''
-    global field, anim_count, anim_speed, anim_limit
+
+    global anim_count, anim_limit, anim_speed, app_running, btn_start
+    global field, score
+
     for i in range(WIDTH):
         if field[0][i]:
+            btn_stop.destroy()
             field = [[0 for i in range(WIDTH)] for i in range(HEIGHT)]
             anim_count, anim_speed, anim_limit = 0, 60, 2000
+            oldscore = score
             score = 0
-            for item in grid_1:
-                game_screen_canv.itemconfigure(item,
-                                        fill=rgb_to_hex(get_color()))
-                time.sleep(0.005)
-                tetris.update_idletasks()
-                tetris.update()
-            for item in grid_1:
-                game_screen_canv.itemconfigure(item, fill="")
+            if grid_1:
+                for item in grid_1:
+                    game_screen_canv.itemconfigure(item, fill="")
+                for item in grid_1:
+                    game_screen_canv.itemconfigure(item,
+                                            fill=rgb_to_hex(get_color()))
+                    time.sleep(0.004)
+                    tetris.update_idletasks()
+                    tetris.update()
+                for item in grid_1:
+                    game_screen_canv.itemconfigure(item, fill="")
+            
+            score_update(nickname, oldscore)
+            app_running = False
+            for g in grid_1: game_screen_canv.delete(g)
+            screen_canv.delete(nick)
+            btn_start = Button(screen_canv, image=start_img, command=start,\
+                                         width=170, height=65, bg='#4a0a77')
+            btn_start.place(x=80, y=540)
 
 
 def on_closing():
     ''' Terminates the application. '''
 
     global app_running
-    if messagebox.askokcancel("Выход из приложения", "Хотите выйти из приложения?"):
+    if messagebox.askokcancel('Exit Application.',\
+                    'Do you want to exit the application?'):
+
+        messagebox.showinfo('Exit Application.', 'Good bye!')
         app_running = False
+        tetris.destroy() 
 
 
 display_top10(top_10)
 x_moving, rotate = 0, False
-def start():
+def game_start(grid):
     '''Launches the program'''
+    
+    print(nickname)
+    global score, x_moving, rotate, app_running, btn_stop
 
-    global score, x_moving, rotate
+    # Replacing one button with another.
+    btn_start.destroy()
+    btn_stop = Button(screen_canv, image=stop_img, command=stop,\
+                             width=170, height=65, bg='#4a0a77')
+    btn_stop.place(x=80, y=540)
+
+    # Main cycle of game.
     while app_running:
         if app_running:
             # Moving our figure along the x coordinate.
@@ -222,9 +335,11 @@ def start():
             # Displays a changing in score and record
             screen_canv.itemconfigure(scr, text=f'Score: {score}')
             screen_canv.itemconfigure(rec, text=f'BEST RECORD:  {record}')
+            screen_canv.itemconfigure(nick, text=f'Your nickname:\
+                                                 \n {nickname}')
 
             # Game over
-            game_over()
+            game_over(grid)
 
             # Set default values for next iteration. 
             x_moving, rotate = 0, False
@@ -235,4 +350,60 @@ def start():
             for id_fig in fig1: game_screen_canv.delete(id_fig)
             # Remove from the following figures, the current one.
             for id_fig in fig2: screen_canv.delete(id_fig)
-        time.sleep(0.005)
+        # Delay for cycle update. 
+        time.sleep(0.007)
+
+    # Actions after forced termination of the game lifecycle.
+
+    # Sets the parameter needed to execute the function game_over.
+    field[0][1] = '#ff002b'
+    game_over(grid)
+    tetris.update_idletasks()
+    tetris.update()
+
+
+def start():
+    ''' The function to launch the game from the game menu.
+        Changed global variables. 
+        Also calling the create_nickname function to display the player's,
+        nickname, and later writes it with a score to the result file.
+        Create grid for play field and call function start for launch game.
+
+    '''
+   
+    global app_running, nickname, nick
+
+    # Sets a nickname for one game sesion. 
+    nickname = create_nick ()
+
+    # Displays the current nickname and stores it in a variable for deletion
+    # after the end of the game.
+    nick = screen_canv.create_text(35, 155, text=f'Your nickname:\
+        \n {nickname}', font=('ProtoSans56', 25), fill='blue', anchor='nw')
+
+    # Create grid for game sesion.
+    grid = create_grid()
+    # Delay. Needed so that the bі user has time to switch between windows,
+    # entering a nickname in the console and the game.
+    # The application stops responding for 3 seconds, it's okay, SO NECESSARY!
+    time.sleep(3)
+    app_running = True
+
+    # Launch the game.
+    game_start(grid)
+    
+
+def stop():
+    '''Function to stop the game and go back to the game menu.'''
+
+    global app_running
+    app_running = False
+    
+
+# Creates buttons for control of application.
+btn_start = Button(screen_canv, image=start_img, command=start, width=170,\
+                                                 height=65, bg='#4a0a77')
+btn_start.place(x=80, y=540)
+btn_quit = Button(screen_canv, image=quit_img, command=on_closing, width=170, \
+                                                 height=65, bg='#4a0a77')
+btn_quit.place(x=80, y=610)
