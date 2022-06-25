@@ -4,10 +4,13 @@ File containing all constants.
 ================================
 
 '''
-
+from os import path
 from tkinter import *
 from tkinter import messagebox
 
+
+p = path.dirname(__file__)
+p = p.replace('\\', '/')
 
 TILE = 35  # size of one piece
 WIDTH, HEIGHT = 12, 18  # how many such pieces vertically and horizontally
@@ -18,7 +21,8 @@ RES = 700, 1200  # screen resolution
 # Settings of window
 tetris = Tk()
 tetris.title('TETRIS')
-tetris.iconbitmap('img/Tetris.ico')
+ico = path.abspath(f'{p}/img/Tetris.ico')
+tetris.iconbitmap(ico)
 tetris.wm_attributes('-topmost', 1)
 tetris.geometry(f'{RES[1]}x{RES[0]}')
 
