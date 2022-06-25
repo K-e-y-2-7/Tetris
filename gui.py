@@ -1,5 +1,5 @@
 '''
-gui.py.
+Gui.py.
 A file that reproduces the graphical interface.  
 ===============================================
 
@@ -34,21 +34,26 @@ def get_score(stop=None) -> list:
 
     '''
 
-    with open('Scores.txt', 'r') as score_file_r:
+    with open(path.abspath(f'{p}/Scores.txt'), 'r') as score_file_r:
         score = [line[:-1] for idx, line in enumerate(score_file_r)\
                                                     if idx != stop and line]
         
     return score
 
 # The disign of interface
-def display_top10(top, y = 40):
+
+text = []
+def display_top10(y = 40):
     ''' Function display list of best 10 players with their scores.
 
     '''
 
+    global text 
+
+    top = get_score(stop = 10)
     for player in top:
-        top_10_canv.create_text(20, y, text=f'{player}',\
-                    font=('ProtoSans56', 15), fill='#8A888A', anchor='nw')
+        text.append(top_10_canv.create_text(20, y, text=f'{player}',\
+                    font=('ProtoSans56', 15), fill='#8A888A', anchor='nw'))
         y += 35
 
 # Functions displays images.
@@ -85,23 +90,37 @@ def display_image(canv: Canvas, img: str, resize: tuple,
 
 # Creates images of our figures
 figs_img = {
-    'i-fig': PILImage.open('img/I_figure_one_pxl.png').resize((35, 35)),
-    'j-fig': PILImage.open('img/J_figure_one_pxl.png').resize((35, 35)), 
-    'l-fig': PILImage.open('img/L_figure_one_pxl.png').resize((35, 35)), 
-    'o-fig': PILImage.open('img/O_figure_one_pxl.png').resize((35, 35)), 
-    's-fig': PILImage.open('img/S_figure_one_pxl.png').resize((35, 35)), 
-    't-fig': PILImage.open('img/T_figure_one_pxl.png').resize((35, 35)), 
-    'z-fig': PILImage.open('img/Z_figure_one_pxl.png').resize((35, 35)) }
+    'i-fig': PILImage.open(path.abspath(f'{p}/img/I_figure_one_pxl.png'))\
+                                                        .resize((35, 35)),
+    'j-fig': PILImage.open(path.abspath(f'{p}/img/J_figure_one_pxl.png'))\
+                                                        .resize((35, 35)), 
+    'l-fig': PILImage.open(path.abspath(f'{p}/img/L_figure_one_pxl.png'))\
+                                                        .resize((35, 35)), 
+    'o-fig': PILImage.open(path.abspath(f'{p}/img/O_figure_one_pxl.png'))\
+                                                        .resize((35, 35)), 
+    's-fig': PILImage.open(path.abspath(f'{p}/img/S_figure_one_pxl.png'))\
+                                                        .resize((35, 35)), 
+    't-fig': PILImage.open(path.abspath(f'{p}/img/T_figure_one_pxl.png'))\
+                                                        .resize((35, 35)), 
+    'z-fig': PILImage.open(path.abspath(f'{p}/img/Z_figure_one_pxl.png'))\
+                                                        .resize((35, 35)) }
 
 
 nxt_figs_img = {
-    'i-fig': PILImage.open('img/I_figure.png').resize((185, 47)),
-    'j-fig': PILImage.open('img/J_figure.png').resize((95, 140)), 
-    'l-fig': PILImage.open('img/L_figure.png').resize((95, 140)), 
-    'o-fig': PILImage.open('img/O_figure.png').resize((93, 93)), 
-    's-fig': PILImage.open('img/S_figure.png').resize((93, 140)), 
-    't-fig': PILImage.open('img/T_figure.png').resize((93, 140)), 
-    'z-fig': PILImage.open('img/Z_figure.png').resize((93, 140)) }
+    'i-fig': PILImage.open(path.abspath(f'{p}/img/I_figure.png'))\
+                                                .resize((185, 47)),
+    'j-fig': PILImage.open(path.abspath(f'{p}/img/J_figure.png'))\
+                                                .resize((95, 140)), 
+    'l-fig': PILImage.open(path.abspath(f'{p}/img/L_figure.png'))\
+                                                .resize((95, 140)), 
+    'o-fig': PILImage.open(path.abspath(f'{p}/img/O_figure.png'))\
+                                                .resize((93, 93)), 
+    's-fig': PILImage.open(path.abspath(f'{p}/img/S_figure.png'))\
+                                                .resize((93, 140)), 
+    't-fig': PILImage.open(path.abspath(f'{p}/img/T_figure.png'))\
+                                                .resize((93, 140)), 
+    'z-fig': PILImage.open(path.abspath(f'{p}/img/Z_figure.png'))\
+                                                .resize((93, 140)) }
 
 
 # Functions displays game elements
@@ -134,7 +153,8 @@ def draw_figure(fig_list: list, figure: list) -> list:
 
         return fig_img
 
-    def disp_piece_img(fig_img, piece_rect_x, piece_rect_y) -> ImageTk.PhotoImage:
+    def disp_piece_img(fig_img, piece_rect_x,\
+                                 piece_rect_y) -> ImageTk.PhotoImage:
         ''' Function accepts name of image, x and y coordinate.
             Display image.
 
@@ -205,29 +225,34 @@ def draw_field(fig_list: list, field) -> list:
 
 
 # Creates and display background images.
-bg_img = display_image(canv=screen_canv, img='img/background_img.png',\
-                        resize=(1200, 700), coordinate=(0, 0), anch=('nw'))
+bg_img = display_image(canv=screen_canv, img=path.abspath(\
+            f'{p}/img/background_img.png'), resize=(1200, 700),\
+                                 coordinate=(0, 0), anch=('nw'))
 field_bg_img = display_image(canv=game_screen_canv, resize=(420, 630),\
-            img='img/field_background.png', coordinate=(0, 0), anch=('nw'))
+            img=path.abspath(f'{p}/img/field_background.png'),\
+                                 coordinate=(0, 0), anch=('nw'))
 bg_top_img = display_image(canv=top_10_canv, resize=(310, 470),\
-            img='img/bg3.png', coordinate=(0, -70), anch=('nw'))
+            img=path.abspath(f'{p}/img/bg_of_top.png'), coordinate=(0, -70),\
+                                                                 anch=('nw'))
 
-name_img = display_image(canv=screen_canv, img='img/Tetris_logo.png',\
-                        resize=(341, 98), coordinate=(30, 10), anch=('nw'))
-top10_img = display_image(canv=screen_canv, img='img/top_ten_image.png',\
-                    resize=(160, 120), coordinate=(930, 20), anch=('nw'))
+name_img = display_image(canv=screen_canv,\
+         img=path.abspath(f'{p}/img/Tetris_logo.png'), resize=(341, 98),\
+                                         coordinate=(30, 10), anch=('nw'))
+top10_img = display_image(canv=screen_canv,\
+         img=path.abspath(f'{p}/img/top_ten_image.png'), resize=(160, 120),\
+                                         coordinate=(930, 20), anch=('nw'))
 
 # Creates images for buttons.
-start_img = image_generator('img/start.png', 220, 110)
-stop_img = image_generator('img/stop.png', 180, 75)
-quit_img = image_generator('img/quit.png', 220, 110)
+start_img = image_generator(path.abspath(f'{p}/img/start.png'), 220, 110)
+stop_img = image_generator(path.abspath(f'{p}/img/stop.png'), 180, 75)
+quit_img = image_generator(path.abspath(f'{p}/img/quit.png'), 220, 110)
 
 # Determine competition variables.
 score, lines = 0, 0
 scores = {0: 0, 1: 10, 2: 30, 3: 70, 4: 120}
-top_10 = get_score(stop = 10)
-if top_10:
-    record = int(top_10[0].split(': ')[2])
+
+if get_score(stop = 1):
+    record = int(get_score(stop = 1)[0].split(': ')[2])
 else:
     record = 0 
 
@@ -255,4 +280,3 @@ def create_grid() -> list:
 
 grid_2 = [top_10_canv.create_rectangle(x, y * TILE, x * 309, y * TILE + TILE)\
                                      for x in range(2) for y in range(HEIGHT)]
-
