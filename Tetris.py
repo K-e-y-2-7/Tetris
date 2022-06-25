@@ -11,5 +11,6 @@ import Game_logic
 try:    
     Game_logic.tetris.mainloop()  
 except FileNotFoundError:
-    with open('Scores.txt', 'w') as score_file_w:
+    with open(Game_logic.path.abspath(f'{Game_logic.p}/img/Scores.txt'), 'w')\
+                                                        as score_file_w:
         pass 
