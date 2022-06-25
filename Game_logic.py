@@ -80,7 +80,7 @@ def create_nick() -> str:
 def score_update(nick: str, score):
     ''' Function which update data in score file. '''
     
-    with open('Scores.txt', 'r') as score_file_r:
+    with open(path.abspath(f'{p}/Scores.txt'), 'r') as score_file_r:
         # An explanation for the horrible incomprehensible
         # construction below.
         #
@@ -102,7 +102,7 @@ def score_update(nick: str, score):
         old_scores.sort(key=lambda item: item[1], reverse=True) 
         # Now we overwrite our file to make changes.
 
-        with open('Scores.txt', 'w') as score_file_w:
+        with open(path.abspath(f'{p}/Scores.txt'), 'w') as score_file_w:
             # Creates new dict with updated and sorted data
             new_scores = {item[0] : int(item[1]) for item in old_scores}
             # Put our dict in a file
@@ -251,7 +251,7 @@ def game_over(grid_1):
     '''Function determines behavior after the end of the game'''
 
     global anim_count, anim_limit, anim_speed, app_running, btn_start
-    global field, score
+    global field, score, record
 
     for i in range(WIDTH):
         # Check if the game is over.
@@ -279,15 +279,21 @@ def game_over(grid_1):
             app_running = False
             # Writes score in Scores.txt 
             score_update(nickname, oldscore)
-            # Delete the grid of the game session.
+            # Deletes the grid of the game session.
             for g in grid_1: game_screen_canv.delete(g)
-            # Delete the text of nickname of the game session.
+            # Deletes the text of nickname of the game session.
             screen_canv.delete(nick)
             # Creates a button in place of the deleted one.
             btn_start = Button(screen_canv, image=start_img, command=start,\
                                          width=170, height=65, bg='#4a0a77')
             btn_start.place(x=80, y=540)
-            display_top10(top_10)
+            # Updates list of top players and record 
+            for x in text:
+                print(x)
+                top_10_canv.delete(x)
+            display_top10()
+
+            record = int(get_score(stop = 1)[0].split(': ')[2])
 
 
 def on_closing():
@@ -301,7 +307,7 @@ def on_closing():
         app_running = False
         tetris.destroy() 
 
-display_top10(top_10)
+display_top10()
 
 x_moving, rotate = 0, False
 def game_start(grid):
@@ -309,8 +315,7 @@ def game_start(grid):
     
     global app_running, btn_stop, x_moving, rotate, score
 
-    # Replacing one button with another.
-    btn_start.destroy()
+    # Creates a button in place of the deleted one.
     btn_stop = Button(screen_canv, image=stop_img, command=stop,\
                              width=170, height=65, bg='#4a0a77')
     btn_stop.place(x=80, y=540)
@@ -382,6 +387,9 @@ def start():
    
     global app_running, nickname, nick
 
+    # Remove the button to then replace it with another.
+    btn_start.destroy()
+
     # Sets a nickname for one game sesion. 
     nickname = create_nick ()
 
@@ -413,6 +421,6 @@ def stop():
 btn_start = Button(screen_canv, image=start_img, command=start, width=170,\
                                                  height=65, bg='#4a0a77')
 btn_start.place(x=80, y=540)
-btn_quit = Button(screen_canv, image=quit_img, command=on_closing, width=170, \
+btn_quit = Button(screen_canv, image=quit_img, command=on_closing, width=170,\
                                                  height=65, bg='#4a0a77')
 btn_quit.place(x=80, y=610)
