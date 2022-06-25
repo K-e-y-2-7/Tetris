@@ -289,7 +289,6 @@ def game_over(grid_1):
             btn_start.place(x=80, y=540)
             # Updates list of top players and record 
             for x in text:
-                print(x)
                 top_10_canv.delete(x)
             display_top10()
 
