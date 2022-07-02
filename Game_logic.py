@@ -31,6 +31,7 @@ get_color = lambda: (randrange(30, 256), randrange(30, 256),
                                          randrange(30, 256))
 
 
+# The nickname creation and the validation functioins.
 def create_nick() -> str:
     ''' Function creates nick name.
 
@@ -65,7 +66,6 @@ def validate_len_nick(nick: str) -> bool:
     return False
 
 
-# Functions for score display.
 def validate_char_nick(nick: str) -> bool:
     ''' Function validate caracter of nick name.
 
@@ -106,12 +106,13 @@ def nick_validation() -> str:
 
     while True:
         nickname = create_nick()
-        if validate_len_nick(nickname):
-            if validate_char_nick(nickname):
-                return nickname
+        if validate_len_nick(nickname) and validate_char_nick(nickname):
+                
+            return nickname
 
 
-def score_update(nick: str, score):
+# Function for score display.
+def score_update(nick: str, score) -> None:
     ''' Function which update data in score file. '''
     
     with open(path.abspath(f'{p}/Scores.txt'), 'r') as score_file_r:
@@ -121,13 +122,16 @@ def score_update(nick: str, score):
         # Disassemble in dict comprehension into a string file that
         # already consisted of dict, and build a new dict
         # from these strings.
-        old_scores = {(line.split(' : ')[1][:-2]).split(': ')[0].strip() : \
-                                  int((line.split(' : ')[1]).split(': ')[1])
-                                      for line in score_file_r if line[:-2]}
+        old_scores = {}
+        for line in score_file_r:
+            if line[:-2]:
+                key = (line.split(' : ')[1][:-2]).split(': ')[0].strip()
+                value = int((line.split(' : ')[1]).split(': ')[1])
 
-        if nick in old_scores.keys():
-            if score > old_scores.get(nick):
-                old_scores.update([(nick, score)])
+                old_scores[key] = value
+                
+        if nick in old_scores.keys() and score > old_scores.get(nick):
+            old_scores.update([(nick, score)])
         else:
             old_scores.update([(nick, score)])
         # We turn the dict into a list for sorting data in it
