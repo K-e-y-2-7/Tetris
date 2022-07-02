@@ -201,7 +201,7 @@ game_screen_canv.bind_all("<KeyPress-Left>", move_obj)
 game_screen_canv.bind_all("<KeyPress-Right>", move_obj)
 
 # Functions responsible for the logic of the playing field.
-def check_borders(index) -> bool:
+def check_borders(index: int) -> bool:
     ''' The function compares the position of the figure with the
         edge of the field, and does not allow it to climb beyond the edge.
 
@@ -247,7 +247,7 @@ def check_lines() -> int:
     return lines
 
 # Functions responsible for logic outside the game.
-def game_over(grid_1):
+def game_over(grid_1: list):
     '''Function determines behavior after the end of the game'''
 
     global anim_count, anim_limit, anim_speed, app_running, btn_start
@@ -309,7 +309,7 @@ def on_closing():
 display_top10()
 
 x_moving, rotate = 0, False
-def game_start(grid):
+def game_start(grid: list):
     '''Launches the program'''
     
     global app_running, btn_stop, x_moving, rotate, score
