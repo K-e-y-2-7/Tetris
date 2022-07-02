@@ -10,7 +10,6 @@ from random import choice, randrange
 import time
 from string import ascii_letters
 
-from Exceptions import *
 from Gui import *
 
 # Define main variables of game.
