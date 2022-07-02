@@ -32,49 +32,84 @@ get_color = lambda: (randrange(30, 256), randrange(30, 256),
                                          randrange(30, 256))
 
 
-# Functions for score display.
 def create_nick() -> str:
-    ''' Function creates nick name, and validate it.
+    ''' Function creates nick name.
 
         =================
         Return: nickname.
+
     '''
 
-    while True:
-        messagebox.showinfo(title='NICKNAME', message='\
-        \n  Enter your nickname in console.\
-        \n The nickname must contain no more than 10 characters, \
-        \ncannot be an empty string, and must only contain numbers, \
-        \nASCII characters, and/or underscores: ')
-
-        nickname = input('Enter your nickname.\
-        \n The nickname must contain no more than 10 characters,\
-        \ncannot be an empty string, and must only contain numbers,\
-        \nASCII characters, and/or underscores: ')
-
-        suitable_symbols = ''.join((f'{ascii_letters}', '_', '0123456789'))
-
-        # Validation.
-        if nickname:
-            if len(nickname) <= 10:
-                for character in nickname:
-                    if character not in suitable_symbols:
-                        messagebox.showwarning(title='Not valid char',\
-                            message=f'Character "{character}" \
-                                \n not ASCII, number or "_" !')
-                        break 
-                else:
-                    break
-            else:
-                messagebox.showwarning(title='Too long nick',\
-                    message=f'Length of your nickname = {len(nickname)}\
-        \n must be not more than ten!')
-        else: 
-            messagebox.showwarning(title='Empty nick',\
-                    message=f'Length of your nickname = {len(nickname)}\
-        \n must be not empty and not "  "!')
-
+    nickname = input('Enter your nickname.\
+    \n The nickname must contain no more than 10 characters,\
+    \ncannot be an empty string, and must only contain numbers,\
+    \nASCII characters, and/or underscores: ')
+  
     return nickname
+
+
+def validate_len_nick(nick: str) -> bool:
+    ''' Function validate length nick name.
+
+        =============
+        Return: Bool.
+
+    '''
+
+    if 0 < len(nick) < 11:
+        return True
+    
+    messagebox.showwarning(title='Too long nick',\
+            message=f'The length of your nickname = {len(nick)}\
+    \n must be between 0 and 10 inclusive!')
+
+    return False
+
+
+# Functions for score display.
+def validate_char_nick(nick: str) -> bool:
+    ''' Function validate caracter of nick name.
+
+        =============
+        Return: Bool.
+
+    '''
+
+    suitable_symbols = ''.join((f'{ascii_letters}', '_', '0123456789'))
+
+    # Validation.
+    for char in nick:
+        if char not in suitable_symbols:
+            messagebox.showwarning(title='Not valid char',\
+                message=f'Character "{char}" \
+                    \n not ASCII, number or "_" !')
+
+            return False 
+    else:
+        return True
+
+
+def nick_validation() -> str:
+    ''' Function call the nickname creation and the validation
+        functions in a cycle. If the nickname passed validation, 
+        the function returns the nickname.
+
+        =================
+        Return: nickname.
+
+    '''
+
+    messagebox.showinfo(title='NICKNAME', message='\
+    \n  Enter your nickname in console.\
+    \n The nickname must contain no more than 10 characters, \
+    \ncannot be an empty string, and must only contain numbers, \
+    \nASCII characters, and/or underscores: ')
+
+    while True:
+        nickname = create_nick()
+        if validate_len_nick(nickname):
+            if validate_char_nick(nickname):
+                return nickname
 
 
 def score_update(nick: str, score):
@@ -390,7 +425,7 @@ def start():
     btn_start.destroy()
 
     # Sets a nickname for one game sesion. 
-    nickname = create_nick ()
+    nickname = nick_validation()
 
     # Displays the current nickname and stores it in a variable for deletion
     # after the end of the game.
