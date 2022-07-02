@@ -9,22 +9,13 @@ from unittest.mock import Mock
 from Game_logic import *
 
 
-mock = Mock()
-
-
 class NickTestCase(unittest.TestCase):
-    
-    def setUp(self) -> None:
-        user_input = mock.user_input
-        user_input.create_nick.side_effect = ['кирилл', '1234567891011',]
-        self.user_input = user_input.create_nick() 
 
     def test_len(self) -> None:
-        self.assertFalse(validate_len_nick(self.user_input))
+        self.assertFalse(validate_len_nick('1234567891011'))
 
     def test_char(self) -> None:
-        self.assertFalse(validate_char_nick(self.user_input))
-
+        self.assertFalse(validate_char_nick('kирилл'))
 
 
 class ScoreTestCase(unittest.TestCase):
@@ -32,8 +23,19 @@ class ScoreTestCase(unittest.TestCase):
 
 
 class RGBTestCase(unittest.TestCase):
-    NotImplemented
 
+    def setUp(self) -> None:
+        self.rgb = rgb_to_hex(get_color())
+    
+    def test_rgb_is_str(self):
+        self.assertIsInstance(self.rgb, str,\
+                                     'Must be instance of str')
+
+    def test_len(self) -> None:
+        self.assertTrue(len(self.rgb) == 7)
+
+    def test_startwith(self) -> None:
+        self.assertEqual(self.rgb[0], '#')
 
 class MoveXTestCase(unittest.TestCase):
     NotImplemented
