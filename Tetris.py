@@ -8,6 +8,8 @@ The main file of game.
 import Game_logic
 
 
+game_version = '0.2'
+
 try:    
     Game_logic.tetris.mainloop()  
 except FileNotFoundError:
