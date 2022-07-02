@@ -6,11 +6,25 @@
 import unittest
 from unittest.mock import Mock
 
-import Game_logic
+from Game_logic import *
+
+
+mock = Mock()
 
 
 class NickTestCase(unittest.TestCase):
-    NotImplemented
+    
+    def setUp(self) -> None:
+        user_input = mock.user_input
+        user_input.create_nick.side_effect = ['кирилл', '1234567891011',]
+        self.user_input = user_input.create_nick() 
+
+    def test_len(self) -> None:
+        self.assertFalse(validate_len_nick(self.user_input))
+
+    def test_char(self) -> None:
+        self.assertFalse(validate_char_nick(self.user_input))
+
 
 
 class ScoreTestCase(unittest.TestCase):
