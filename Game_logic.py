@@ -112,7 +112,7 @@ def nick_validation() -> str:
 
 
 # Function for score display.
-def score_update(nick: str, score) -> None:
+def score_update(nick: str, score) -> dict:
     ''' Function which update data in score file. '''
     
     with open(path.abspath(f'{p}/Scores.txt'), 'r') as score_file_r:
@@ -147,7 +147,7 @@ def score_update(nick: str, score) -> None:
             for idx, (key, value) in enumerate(new_scores.items()):
                 score_file_w.write(f'#{idx + 1} : {key}: {value} \n')
         
-        return None
+        return new_scores
 
 
 def rgb_to_hex(rgb: tuple) -> str:
