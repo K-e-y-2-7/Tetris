@@ -10,7 +10,6 @@ from Game_logic import *
 
 
 class NickTestCase(unittest.TestCase):
-
     def test_len(self) -> None:
         self.assertFalse(validate_len_nick('1234567891011'))
 
@@ -19,7 +18,49 @@ class NickTestCase(unittest.TestCase):
 
 
 class ScoreTestCase(unittest.TestCase):
-    NotImplemented
+    def setUp(self) -> None:
+        self.scores = get_old_score()
+        self.nick = 'k'
+        self.old_score = 1
+        self.new_score = 2
+
+    def test_isinstance_get_old_score(self):
+        self.assertIsInstance(self.scores, dict,\
+                                     'Must be instance of dict')
+
+    def test_write_new_score(self):
+        add_scores = update_score(self.nick, self.old_score, self.scores)
+        self.assertEqual(self.old_score, add_scores[self.nick])
+
+    def test_update_score(self):
+        add_scores = update_score(self.nick, self.old_score, self.scores)
+        updates_scores = update_score(self.nick, self.new_score, add_scores)
+        self.assertEqual(self.new_score, updates_scores[self.nick])
+
+    def test_not_update(self):
+        add_scores = update_score(self.nick, self.new_score, self.scores)
+        updates_scores = update_score(self.nick, self.old_score, add_scores)
+        self.assertNotEqual(self.old_score, updates_scores[self.nick])
+
+    def test_isinstance_update_score(self):
+        updates_scores = update_score(self.nick, self.old_score, self.scores)
+        self.assertIsInstance(updates_scores, dict,\
+                                     'Must be instance of dict')
+
+    def test_isinstance_sort_scores(self):
+        updates_scores = update_score(self.nick, self.old_score, self.scores)
+        sorted_scores = sort_scores(updates_scores)
+        self.assertIsInstance(sorted_scores, list, 'Must be instance of list')
+
+    def test_sorting_sort_scores(self):
+        updates_scores = {'k': 1, 'l': 100, 'a': 50, 'c': 10, 'd': 40}
+        not_sorted = [(key, value) for key, value in updates_scores.items()]
+        sorted = sort_scores(updates_scores)
+        try: self.assertListEqual(not_sorted, sorted)
+        except AssertionError: pass
+        else: self.fail('Lists must be not equal')
+    
+    
 
 
 class RGBTestCase(unittest.TestCase):
