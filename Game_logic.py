@@ -36,6 +36,7 @@ def create_nick() -> str:
     ''' Function creates nick name.
 
         =================
+
         Return: nickname.
 
     '''
@@ -52,6 +53,7 @@ def validate_len_nick(nick: str) -> bool:
     ''' Function validate length nick name.
 
         =============
+
         Return: Bool.
 
     '''
@@ -70,6 +72,7 @@ def validate_char_nick(nick: str) -> bool:
     ''' Function validate caracter of nick name.
 
         =============
+
         Return: Bool.
 
     '''
@@ -94,6 +97,7 @@ def nick_validation() -> str:
         the function returns the nickname.
 
         =================
+
         Return: nickname.
 
     '''
@@ -112,48 +116,123 @@ def nick_validation() -> str:
 
 
 # Function for score display.
-def score_update(nick: str, score) -> dict:
-    ''' Function which update data in score file. '''
-    
-    with open(path.abspath(f'{p}/Scores.txt'), 'r') as score_file_r:
-        # An explanation for the horrible incomprehensible
-        # construction below.
-        #
-        # Disassemble in dict comprehension into a string file that
-        # already consisted of dict, and build a new dict
-        # from these strings.
-        old_scores = {}
+def get_old_score() -> dict:
+    ''' The function try to retrieves the player score data from the
+        Scores.txt file and places it in a dict. If the FileNotFoundError
+        was raised function will create empty file.
+
+        =============================
+        
+        Return: a dict of old scores.
+
+    '''
+
+    old_scores = {}
+    with open(path.abspath(f'{p}/Scores.txt'), 'r') as score_file_r: 
         for line in score_file_r:
+            # Check that the line is not empty. Also use the cut
+            # to remove the character '\n' carriage transfer.
+            # Because otherwise not all empty lines are truly empty. :)
             if line[:-2]:
+                # The 'line' variable contains a string for example:
+                # #some number : player nick: player score
+
+                # Cut out individual parts of the string
+                # to place them in variables.
+
+                # Writes the player's nickname in the key. 
                 key = (line.split(' : ')[1][:-2]).split(': ')[0].strip()
+                # Writes the player's score in the value. 
                 value = int((line.split(' : ')[1]).split(': ')[1])
 
                 old_scores[key] = value
-                
-        if nick in old_scores.keys() and score > old_scores.get(nick):
-            old_scores.update([(nick, score)])
-        else:
-            old_scores.update([(nick, score)])
-        # We turn the dict into a list for sorting data in it
-        # by our special sorting system.
-        old_scores = [(key, value) for key, value in old_scores.items()]
-        old_scores.sort(key=lambda item: item[1], reverse=True) 
-        # Now we overwrite our file to make changes.
 
-        with open(path.abspath(f'{p}/Scores.txt'), 'w') as score_file_w:
-            # Creates new dict with updated and sorted data
-            new_scores = {item[0] : int(item[1]) for item in old_scores}
-            # Put our dict in a file
-            for idx, (key, value) in enumerate(new_scores.items()):
-                score_file_w.write(f'#{idx + 1} : {key}: {value} \n')
+    return old_scores
+
+
+def update_score(nick: str, score: int, old_scores: dict = {}) -> dict:
+    ''' The function checks if the player's new score is greater than
+        his previous score and if it's greater updates the data. If a new
+        player adds to the dict with current record.
+
+        =============================
+
+        Return: updating scores dict.
+    
+    '''
+    
+    if nick in old_scores.keys():
+        if score > old_scores.get(nick):
+            old_scores.update([(nick, score)])
+    else:
+        old_scores.update([(nick, score)])
+
+    return old_scores
+
+
+def sort_scores(updating_scores: dict) -> list:
+    ''' The function transforms the dict to the list and sorts data by points.
+
+        ==============================
+
+        Return: sorted list of scores.
+
+    '''
+
+    # We turn the dict into a list for sorting data in it
+    # by our special sorting system.
+    scores = [(key, value) for key, value in updating_scores.items()]
+    scores.sort(key=lambda item: item[1], reverse=True) 
+
+    return scores
+
+
+def write_update_scores(sorted_scores: list) -> None:
+    ''' The function writes the list with the updated and sorted data
+        in Scores.txt file.
+
+        =============
+
+        Return: None.
+
+    '''
+
+    # Now we overwrite our file to make changes.
+    with open(path.abspath(f'{p}/Scores.txt'), 'w') as score_file_w:
+        # Put our list in a file
+        for idx, item in enumerate(sorted_scores):
+            score_file_w.write(f'#{idx + 1} : {item[0]}: {int(item[1])} \n')
+    
+    return None
+
+
+def update_scores_file (nick: str, score: int) -> None:
+    ''' The function calls functions in sequence that change the count
+        in the file. If the file does not exist, function creates it.
         
-        return new_scores
+        =============
+
+        Return: None.
+
+    '''
+    try:
+        old_scores = get_old_score()
+        updates_scores = update_score(nick, score, old_scores = old_scores)
+        sorted_scores = sort_scores(updates_scores)
+        write_update_scores(sorted_scores)
+    except FileNotFoundError:
+        updates_scores = update_score(nick, score)
+        sorted_scores = sort_scores(updates_scores)
+        write_update_scores(sorted_scores)
+    
+    return None
 
 
 def rgb_to_hex(rgb: tuple) -> str:
     ''' Convert color numbers to hexadecimal number.
 
         ===========================
+
         Return: hexadecimal number.
 
     '''
@@ -244,6 +323,7 @@ def check_borders(index: int) -> bool:
         edge of the field, and does not allow it to climb beyond the edge.
 
         =============
+
         Return: bool.
 
     '''
@@ -264,6 +344,7 @@ def check_lines() -> int:
         at the bottom of the field. And counts these lines.
 
         ==============
+        
         Return: lines.
 
     '''
@@ -316,7 +397,7 @@ def game_over(grid_1: list):
             
             app_running = False
             # Writes score in Scores.txt 
-            score_update(nickname, oldscore)
+            update_scores_file(nickname, oldscore)
             # Deletes the grid of the game session.
             for g in grid_1: game_screen_canv.delete(g)
             # Deletes the text of nickname of the game session.
