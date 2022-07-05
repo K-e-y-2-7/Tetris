@@ -60,8 +60,6 @@ class ScoreTestCase(unittest.TestCase):
         except AssertionError: pass
         else: self.fail('Lists must be not equal')
     
-    
-
 
 class RGBTestCase(unittest.TestCase):
 
@@ -77,21 +75,32 @@ class RGBTestCase(unittest.TestCase):
 
     def test_startwith(self) -> None:
         self.assertEqual(self.rgb[0], '#')
-
-class MoveXTestCase(unittest.TestCase):
-    NotImplemented
-
-
-class MoveYTestCase(unittest.TestCase):
-    NotImplemented
-
-
-class RotateTestCase(unittest.TestCase):
-    NotImplemented  
-
+ 
 
 class MoveTestCase(unittest.TestCase):
-    NotImplemented
+    def test_rotate_move(self):
+        mock = Mock()
+        mock.keysym = 'Up'
+        rotate = move_obj(mock)
+        self.assertTrue(rotate)
+
+    def test_fast_fall_move(self):
+        mock = Mock()
+        mock.keysym = 'Down'
+        anim_limit = move_obj(mock)
+        self.assertEqual(100, anim_limit)
+
+    def test_left_move(self):
+        mock = Mock()
+        mock.keysym = 'Left'
+        x_moving = move_obj(mock)
+        self.assertEqual(-1, x_moving)
+
+    def test_right_move(self):
+        mock = Mock()
+        mock.keysym = 'Right'
+        x_moving = move_obj(mock)
+        self.assertEqual(1, x_moving)
 
 
 class CheckBordersTestCase(unittest.TestCase):
