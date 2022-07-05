@@ -218,13 +218,12 @@ def update_scores_file (nick: str, score: int) -> None:
     try:
         old_scores = get_old_score()
         updates_scores = update_score(nick, score, old_scores = old_scores)
-        sorted_scores = sort_scores(updates_scores)
-        write_update_scores(sorted_scores)
     except FileNotFoundError:
         updates_scores = update_score(nick, score)
+    finally:
         sorted_scores = sort_scores(updates_scores)
         write_update_scores(sorted_scores)
-    
+
     return None
 
 
@@ -295,7 +294,7 @@ def overturn():
                 break
 
 
-def move_obj(event: str):
+def move_obj(event: object):
     ''' Traks event, and moving or rotate figure.
         Accept event.
 
@@ -304,13 +303,22 @@ def move_obj(event: str):
     global rotate, anim_limit, x_moving
     if event.keysym == 'Up':
         rotate = True
+
+        return rotate
     elif event.keysym == 'Down':
         anim_limit = 100
+
+        return anim_limit
     elif event.keysym == 'Left':
         x_moving = -1
+
+        return x_moving
     elif event.keysym == 'Right':
         x_moving = 1
 
+        return x_moving
+
+        
 # Bind control keys.
 game_screen_canv.bind_all("<KeyPress-Up>", move_obj)
 game_screen_canv.bind_all("<KeyPress-Down>", move_obj)
