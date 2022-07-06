@@ -101,31 +101,4 @@ class MoveTestCase(unittest.TestCase):
         mock.keysym = 'Right'
         x_moving = move_obj(mock)
         self.assertEqual(1, x_moving)
-
-
-class CheckBordersTestCase(unittest.TestCase):
-    NotImplemented
-
-
-class CheckLinesTestCase(unittest.TestCase):
-    NotImplemented
-
-
-class GameOverTestCase(unittest.TestCase):
-    NotImplemented
-
-
-class ClosingTestCase(unittest.TestCase):
-    NotImplemented
-
-
-class StartGameTestCase(unittest.TestCase):
-    NotImplemented
-
-
-class StartTestCase(unittest.TestCase):
-    NotImplemented
-
-
-class StopTestCase(unittest.TestCase):
-    NotImplemented
+        

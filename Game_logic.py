@@ -539,14 +539,14 @@ def start():
 
     # Launch the game.
     game_start(grid)
-    
+
 
 def stop():
     '''Function to stop the game and go back to the game menu.'''
 
     global app_running
     app_running = False
-    
+
 
 # Creates buttons for control of application.
 btn_start = Button(screen_canv, image=start_img, command=start, width=170,\
