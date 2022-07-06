@@ -17,9 +17,13 @@ app_running = True
 anim_count, anim_speed, anim_limit = 0, 60, 2000
 
 # List of coordinates for each part of the figure.
-figures = [[[[x_pos + WIDTH // 2, y_pos + 1, 1, 1] for x_pos, y_pos in \
-                fig_pos[0]], fig_pos[1], fig_pos[2]] for fig_pos in \
-                figures_possition]
+
+figures = []
+for fig_pos in figures_possition:
+    coordinates = [[x_pos + WIDTH // 2, y_pos + 1, 1, 1] for x_pos, y_pos in\
+                                                                  fig_pos[0]]
+    figures.append([coordinates, fig_pos[1], fig_pos[2]])
+
 
 # A list containing lists of zeros.
 # Zeros are subsequently replaced by color and a figure is drawn in this place
@@ -318,7 +322,7 @@ def move_obj(event: object):
 
         return x_moving
 
-        
+
 # Bind control keys.
 game_screen_canv.bind_all("<KeyPress-Up>", move_obj)
 game_screen_canv.bind_all("<KeyPress-Down>", move_obj)
@@ -374,6 +378,7 @@ def check_lines() -> int:
     return lines
 
 # Functions responsible for logic outside the game.
+
 def game_over(grid_1: list):
     '''Function determines behavior after the end of the game'''
 
@@ -386,7 +391,7 @@ def game_over(grid_1: list):
             # Remove the button to then replace it with another.
             btn_stop.destroy()
             # Sets the default values.
-            field = [[0 for i in range(WIDTH)] for i in range(HEIGHT)]
+            field = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
             anim_count, anim_speed, anim_limit = 0, 60, 2000
             oldscore = score
             score = 0
