@@ -118,7 +118,6 @@ def nick_validation() -> str:
                 
             return nickname
 
-
 # Function for score display.
 def get_old_score() -> dict:
     ''' The function try to retrieves the player score data from the
@@ -322,7 +321,6 @@ def move_obj(event: object):
 
         return x_moving
 
-
 # Bind control keys.
 game_screen_canv.bind_all("<KeyPress-Up>", move_obj)
 game_screen_canv.bind_all("<KeyPress-Down>", move_obj)
@@ -378,7 +376,6 @@ def check_lines() -> int:
     return lines
 
 # Functions responsible for logic outside the game.
-
 def game_over(grid_1: list):
     '''Function determines behavior after the end of the game'''
 
@@ -437,6 +434,8 @@ def on_closing():
         messagebox.showinfo('Exit Application.', 'Good bye!')
         app_running = False
         tetris.destroy() 
+        
+        return app_running
 
 display_top10()
 
@@ -540,12 +539,17 @@ def start():
     # Launch the game.
     game_start(grid)
 
+    list_to_return = [app_running, nickname, nick, grid]
+    return list_to_return
+
 
 def stop():
     '''Function to stop the game and go back to the game menu.'''
 
     global app_running
     app_running = False
+
+    return app_running
 
 
 # Creates buttons for control of application.
