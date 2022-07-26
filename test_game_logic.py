@@ -101,4 +101,13 @@ class MoveTestCase(unittest.TestCase):
         mock.keysym = 'Right'
         x_moving = move_obj(mock)
         self.assertEqual(1, x_moving)
-        
+
+
+class StopTestCase(unittest.TestCase):
+    def test_app_run(self):
+        self.assertFalse(stop())
+
+
+class CloseTestCase(unittest.TestCase):
+    def test_app_run(self):
+        self.assertFalse(on_closing())
