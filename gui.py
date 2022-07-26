@@ -25,7 +25,7 @@ top_10_canv = Canvas(tetris, width=310,
 top_10_canv.place(x=865, y=165, anchor='nw')
 
 
-def get_score(stop=None) -> list:
+def get_score(stop: int = None) -> list:
     ''' Finction is extraction data from file scores.txt and
         writing them in list score.
 
@@ -41,9 +41,8 @@ def get_score(stop=None) -> list:
     return score
 
 # The disign of interface
-
 text = []
-def display_top10(y = 40):
+def display_top10(y_pos = 40):
     ''' Function display list of best 10 players with their scores.
 
     '''
@@ -52,9 +51,9 @@ def display_top10(y = 40):
 
     top = get_score(stop = 10)
     for player in top:
-        text.append(top_10_canv.create_text(20, y, text=f'{player}',\
+        text.append(top_10_canv.create_text(20, y_pos, text=f'{player}',\
                     font=('ProtoSans56', 15), fill='#8A888A', anchor='nw'))
-        y += 35
+        y_pos += 35
 
 # Functions displays images.
 def image_generator(img: str, size_x: int, size_y: int) -> ImageTk.PhotoImage:
@@ -272,11 +271,11 @@ def create_grid() -> list:
 
     '''
 
-    grid_1 = [game_screen_canv.create_rectangle(
+    field_grid = [game_screen_canv.create_rectangle(
                 x * TILE, y * TILE, x * TILE+TILE, y * TILE+TILE)
                 for x in range(WIDTH) for y in range(HEIGHT)]
     
-    return grid_1
+    return field_grid
 
-grid_2 = [top_10_canv.create_rectangle(x, y * TILE, x * 309, y * TILE + TILE)\
+top_grid = [top_10_canv.create_rectangle(x, y * TILE, x * 309, y * TILE + TILE)\
                                      for x in range(2) for y in range(HEIGHT)]
