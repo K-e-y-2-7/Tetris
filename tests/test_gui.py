@@ -5,7 +5,7 @@
 
 import unittest
 
-import Gui
+from tetris import Gui
 
 
 class CanvasTestCase(unittest.TestCase):
